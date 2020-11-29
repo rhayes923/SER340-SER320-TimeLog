@@ -61,7 +61,11 @@ window.onload = function () {
                 close[i].onclick = function () {
                     var div = this.parentElement;
                     div.style.display = "none";
-                    assignments.splice(n, 1);
+                    // find value of deleted item in array and remove it
+                    var index = assignments.indexOf(div.firstChild.data);
+                    if (index > -1) {
+                        assignments.splice(index, 1);
+                    }
                     // store the assignments in the cookie
                     window.localStorage.setItem("assns", assignments);
                 };
@@ -70,41 +74,66 @@ window.onload = function () {
     }
 
     // add the assignment names to the results section
-    if (assignmentsNamesList.length > 0) {
-        for (n = 0; n < assignmentsNamesList.length; n++) {
-            var li2 = document.createElement("li2");
-            var inputValue2 = assignmentsNamesList[n];
-            // append each assignment name to the results list
-            var t2 = document.createTextNode(inputValue2);
-            li2.appendChild(t2);
+    if (assignmentsNamesList != null) {
+        if (assignmentsNamesList.length > 0) {
+            for (n = 0; n < assignmentsNamesList.length; n++) {
+                var li2 = document.createElement("li2");
+                var inputValue2 = assignmentsNamesList[n];
+                // append each assignment name to the results list
+                var t2 = document.createTextNode(inputValue2);
+                li2.appendChild(t2);
 
-            document.getElementById("resultsList").appendChild(li2);
-            document.getElementById("myInput").value = "";
+                document.getElementById("resultsList").appendChild(li2);
+                document.getElementById("myInput").value = "";
 
-            var span2 = document.createElement("SPAN");
-            var txt2 = document.createTextNode("");
-            span2.className = "close";
-            span2.appendChild(txt2);
-            li2.appendChild(span2);
+                var span2 = document.createElement("SPAN");
+                var txt2 = document.createTextNode("");
+                span2.className = "close";
+                span2.appendChild(txt2);
+                li2.appendChild(span2);
 
-            //add the times
-            var li3 = document.createElement("li");
-            var inputValue3 = assignmentTimeList[n];
+                //add the times
+                var li3 = document.createElement("li");
+                var inputValue3 = assignmentTimeList[n];
 
-            var t3 = document.createTextNode(inputValue3);
-            li3.appendChild(t3);
+                var t3 = document.createTextNode(inputValue3);
+                li3.appendChild(t3);
 
-            document.getElementById("resultsList").appendChild(li3);
-            document.getElementById("myInput").value = "";
+                document.getElementById("resultsList").appendChild(li3);
+                document.getElementById("myInput").value = "";
 
-            var span3 = document.createElement("SPAN");
-            var txt3 = document.createTextNode("");
-            span3.className = "close";
-            span3.appendChild(txt3);
-            li3.appendChild(span3);
+                var span3 = document.createElement("SPAN");
+                var txt3 = document.createTextNode("");
+                span3.className = "close";
+                span3.appendChild(txt3);
+                li3.appendChild(span3);
+            }
         }
     }
 };
+
+function exportCsv(filename, content) {
+    // generate download results.txt file with survey results
+    // initialize content variable to prevent initial null string when appending assignments to it
+    var content = "";
+    if (assignmentsNamesList != null) {
+        if (assignmentsNamesList.length > 0) {
+            for (n = 0; n < assignmentsNamesList.length; n++) {
+                // format txt output in a csv style to allow for importing to spreadsheet
+                content += assignmentsNamesList[n] + "," + assignmentTimeList[n] + "\n";
+            }
+        }
+    }
+
+    // set fownload filename
+    var filename = "results.csv";
+
+    var element = document.createElement("a");
+    element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(content));
+    element.setAttribute("download", filename);
+
+    element.click();
+}
 
 // add new assignment button
 function newElement() {
@@ -128,4 +157,19 @@ function newElement() {
     span.className = "close";
     span.appendChild(txt);
     li.appendChild(span);
+
+    // add close button to newly added assignments
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+            var div = this.parentElement;
+            div.style.display = "none";
+            // find value of deleted item in array and remove it
+            var index = assignments.indexOf(div.firstChild.data);
+            if (index > -1) {
+                assignments.splice(index, 1);
+            }
+            // store the assignments in the cookie
+            window.localStorage.setItem("assns", assignments);
+        };
+    }
 }

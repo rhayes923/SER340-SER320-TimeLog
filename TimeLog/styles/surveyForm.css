@@ -72,3 +72,17 @@ li2 {
     text-decoration-color: black;
     text-decoration-style: double;
 }
+
+.download-btn {
+    background-color: rgb(56, 117, 190);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    padding: 12px 30px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.download-btn:hover {
+    background-color: rgb(35, 86, 148);
+}
