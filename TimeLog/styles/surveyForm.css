@@ -86,3 +86,14 @@ li2 {
 .download-btn:hover {
     background-color: rgb(35, 86, 148);
 }
+
+.checkbox.checkbox-left-label label,
+.checkbox-inline.checkbox-left-label {
+    align-items: center;
+  padding-right: 20px;
+}
+
+.checkbox.checkbox-left-label input[type=checkbox],
+.checkbox-inline.checkbox-left-label input[type=checkbox] {
+  margin-left: 7.2px;
+}

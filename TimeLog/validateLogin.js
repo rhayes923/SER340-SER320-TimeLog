@@ -36,7 +36,7 @@ validateEmail = (email) => {
 validatePassword = (email, password) => {
   if (email == "student@qu.edu" && password == "student") {
     alert("The user has successfully logged in");
-    document.getElementById("loginForm").action = "studentPage.html";
+    document.getElementById("loginForm").action = "coursesPage.html";
     return true;
   } else if (email == "faculty@qu.edu" && password == "faculty") {
     alert("The user has successfully logged in");
