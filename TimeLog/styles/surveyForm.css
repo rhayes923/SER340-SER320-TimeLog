@@ -90,10 +90,25 @@ li2 {
 .checkbox.checkbox-left-label label,
 .checkbox-inline.checkbox-left-label {
     align-items: center;
-  padding-right: 20px;
+    padding-right: 20px;
 }
 
-.checkbox.checkbox-left-label input[type=checkbox],
-.checkbox-inline.checkbox-left-label input[type=checkbox] {
-  margin-left: 7.2px;
+.checkbox.checkbox-left-label input[type="checkbox"],
+.checkbox-inline.checkbox-left-label input[type="checkbox"] {
+    margin-left: 7.2px;
+}
+
+.add-btn {
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    padding: 18px 20px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.add-btn:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
 }
