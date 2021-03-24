@@ -1,29 +1,25 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const lessonSchema = import('./lesson');
-const Lesson = mongoose.model("Lesson", courseSchema);
-
+const lessonSchema = import("./lesson");
+const Lesson = mongoose.model("Lesson", lessonSchema);
 
 const courseSchema = new Schema({
-    name: {
-      type: String,
-      required: true,
-      unique: true,
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  courseCode: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  lessons: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Lesson",
     },
-    courseCode: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    lessons: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Lesson",
-      },
-    ],
-  });
+  ],
+});
 
-
-
-
-  module.exports = courseSchema;
+module.exports = courseSchema;
