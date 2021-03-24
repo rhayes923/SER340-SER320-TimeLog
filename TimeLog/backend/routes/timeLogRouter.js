@@ -4,40 +4,27 @@ var timeLogRouter = express.Router();
 const mongoose = require("mongoose");
 const timeLog = require("../models/accounts");
 
-timeLogRouter
-  .route("/")
-  .all((req, res, next) => {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    next();
-  })
-  .get((req, res, next) => {});
+timeLogRouter.route("/").get((req, res, next) => {});
 
 timeLogRouter
-  .route("/:account")
+  .route("/:userid")
   .get((req, res, next) => {})
-  .post((req, res, next) => {})
-  .put((req, res, next) => {})
-  .delete((req, res, next) => {});
+  .post((req, res, next) => {});
 
 timeLogRouter
-  .route("/:account/:course")
+  .route("/:userid/courses")
   .get((req, res, next) => {})
-  .post((req, res, next) => {})
-  .put((req, res, next) => {})
-  .delete((req, res, next) => {});
+  .post((req, res, next) => {});
 
 timeLogRouter
-  .route("/:account/:course/:lesson/")
+  .route("/:userid/courses/:courseid/lessons")
   .get((req, res, next) => {})
-  .post((req, res, next) => {})
-  .put((req, res, next) => {})
-  .delete((req, res, next) => {});
+  .post((req, res, next) => {});
 
 timeLogRouter
-  .route("/:account/:course/:lesson/:timelog")
+  .route("/:userid/courses/:courseid/lessons/:lessonid/timelog")
   .get((req, res, next) => {})
   .post((req, res, next) => {})
-  .put((req, res, next) => {})
-  .delete((req, res, next) => {});
+  .put((req, res, next) => {});
 
 module.exports = timeLogRouter;
