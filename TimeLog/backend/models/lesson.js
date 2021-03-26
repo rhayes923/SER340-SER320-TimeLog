@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const timeLogSchema = import("./timeLog");
-const TimeLog = mongoose.model("TimeLog", timeLogSchema);
-
 const lessonSchema = new Schema({
   lessonNumber: {
     type: Number,
@@ -33,4 +30,6 @@ const lessonSchema = new Schema({
   ],
 });
 
-module.exports = lessonSchema;
+const Lesson = mongoose.model("Lesson", lessonSchema);
+
+module.exports = Lesson;

@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const courseSchema = import("./course");
-const Course = mongoose.model("Course", courseSchema);
-
 const accountSchema = new Schema({
   email: {
     type: String,
@@ -27,4 +24,7 @@ const accountSchema = new Schema({
   ],
 });
 
-module.exports = accountSchema;
+const Account = mongoose.model("Account", accountSchema);
+
+
+module.exports = Account;

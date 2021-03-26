@@ -8,7 +8,7 @@ var config = require("./config");
 var indexRouter = require("./routes/index");
 //var timeLogRouter = require("./routes/timeLogRouter"); //Milestone 2
 
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const connectionParams = {
   useNewUrlParser: true,
   useCreateIndex: true,

@@ -11,4 +11,7 @@ const timeLogSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = timeLogSchema;
+const TimeLog = mongoose.model("TimeLog", timeLogSchema);
+
+
+module.exports = TimeLog;
