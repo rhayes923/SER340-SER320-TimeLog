@@ -4,9 +4,10 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var config = require("./config");
+var bodyParser = require("body-parser");
 
 var indexRouter = require("./routes/index");
-//var timeLogRouter = require("./routes/timeLogRouter"); //Milestone 2
+var timeLogRouter = require("./routes/timeLogRouter");
 
 const mongoose = require("mongoose");
 const connectionParams = {
@@ -45,9 +46,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
-//app.use("/users", timeLogRouter);  //Milestone 2
+app.use("/users", timeLogRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
