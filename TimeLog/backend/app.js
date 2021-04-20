@@ -5,6 +5,8 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var config = require("./config");
 var bodyParser = require("body-parser");
+var passport = require("passport");
+var LocalStrategy = require("passport-local").Strategy;
 
 var indexRouter = require("./routes/index");
 var timeLogRouter = require("./routes/timeLogRouter");
@@ -48,6 +50,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+var user = require("./models/account");
+app.use(passport.initialize());
+passport.use(new LocalStrategy(user.authenticate()));
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser());
 
 app.use("/", indexRouter);
 app.use("/users", timeLogRouter);
