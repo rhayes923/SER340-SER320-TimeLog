@@ -2,14 +2,15 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 
 exports.getToken = (user) => {
-  return jwt.sign(user, config.secretKey, {
+  return jwt.sign(user.toJSON(), config.secretKey, {
     expiresIn: 1800, //30 minutes
   });
 };
 
-exports.verifyStudent = (req, res, next) => {
+//Verify logged in user
+exports.verifyUser = (req, res, next) => {
   var token =
-    req.body.taken || req.query.token || req.headers["x-access-token"];
+    req.body.token || req.query.token || req.headers["x-access-token"];
   if (token) {
     jwt.verify(token, config.secretKey, (err, decoded) => {
       if (err) {
@@ -29,9 +30,8 @@ exports.verifyStudent = (req, res, next) => {
   console.log("User verified");
 };
 
-exports.verifyFaculty = () => {
-  console.log(req.decoded);
-  if (req.decoded._doc.type == "FACULTY") {
+exports.verifyFaculty = (req, res, next) => {
+  if (req.decoded.userType == "FACULTY") {
     console.log("Faculty Verified");
     next();
   } else {

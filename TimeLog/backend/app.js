@@ -18,7 +18,7 @@ const connectionParams = {
   useUnifiedTopology: true,
 };
 // Connection URL
-var uri = `mongodb+srv://${config.database.username}:${config.database.password}@${config.database.host}`;
+var uri = `mongodb+srv://${config.username}:${config.password}@${config.host}`;
 console.log(uri);
 
 // Connect using mongoose
@@ -56,6 +56,7 @@ app.use(passport.initialize());
 passport.use(new LocalStrategy(user.authenticate()));
 passport.serializeUser(user.serializeUser());
 passport.deserializeUser(user.deserializeUser());
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", timeLogRouter);
