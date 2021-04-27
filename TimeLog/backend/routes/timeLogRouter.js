@@ -63,7 +63,8 @@ timeLogRouter.route("/login").post((req, res, next) => {
       var token = verify.getToken(user);
 
       res.status(200);
-      res.send(token);
+      res.send({token: token,
+        userType: user.userType, id: user.id});
     });
   })(req, res, next);
 });

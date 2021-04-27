@@ -7,6 +7,8 @@ var config = require("./config");
 var bodyParser = require("body-parser");
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
+const cors = require("cors");
+
 
 var indexRouter = require("./routes/index");
 var timeLogRouter = require("./routes/timeLogRouter");
@@ -58,6 +60,12 @@ passport.serializeUser(user.serializeUser());
 passport.deserializeUser(user.deserializeUser());
 app.use(express.static(path.join(__dirname, "public")));
 
+var corsOptions = {
+  origin: "http://localhost:3000"
+};
+
+app.use(cors(corsOptions));
+
 app.use("/", indexRouter);
 app.use("/users", timeLogRouter);
 
@@ -75,6 +83,12 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render("error");
+});
+
+// set port, listen for requests
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
 });
 
 module.exports = app;
