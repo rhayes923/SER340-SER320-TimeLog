@@ -13,9 +13,10 @@ import logo from "./images/QU-Logo.png";
 import "./styles/login.css";
 import axios from "axios";
 import background from "./images/login-background.png";
-
+import auth from './service/authService'
 import FacultyPage from './facultyPage';
 import StudentPage from "./studentPage";
+import CoursesPage from "./coursesPage";
 
 //import auth from "./service/authService";
 
@@ -103,7 +104,7 @@ class Login extends Component {
       );
     } 
     else if(this.state.type === 'student'){
-      return (<StudentPage {...this.state.user}/>)
+      return (<CoursesPage {...this.state.user}/>)
     }
     else if(this.state.type === 'faculty'){
       return (<FacultyPage {...this.state.user}/>)
@@ -116,7 +117,6 @@ class Login extends Component {
     /* try{
         const { data } = this.state;
         await auth.login(data.email, data.password);
-
         const user = auth.getCurrentUser();
         console.log(user);
       } */
@@ -143,9 +143,12 @@ class Login extends Component {
       //const user = auth.getCurrentUser();
       console.log("user is = " + received.data);
     if (received){
+        auth.loginWithJwt(received.data.token)
+        auth.setUserID(received.data.id)
+        auth.setUserType(received.data.userType)
       this.setState({
         invalid: false,
-        received: received
+        user: received.data
       })
       if (received.data.userType === 'STUDENT') {
         console.log("Going to student page!");

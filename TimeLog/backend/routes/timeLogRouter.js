@@ -87,6 +87,22 @@ timeLogRouter
   });
 
 timeLogRouter
+  .route("/courses")
+  //Get all courses 
+  .get( (req, res, next) => {
+    console.log(req.body)
+    course.findById(req.body.id, (err, courses) => {
+      if (err) throw err;
+      res.json(courses);
+    });
+  })
+  .post((req, res, next) => {
+    course.create(req.body, (err, course) => {
+      res.json(course)
+    });
+  })
+
+timeLogRouter
   .route("/:userid/courses")
   //Get all courses for a user
   .get(verify.verifyUser, (req, res, next) => {
@@ -97,7 +113,7 @@ timeLogRouter
       .populate("courses")
       .exec((err, user) => {
         if (err) throw err;
-        res.json(user.courses);
+        res.send(user.courses);
       });
   })
   //Add a new course for a user
