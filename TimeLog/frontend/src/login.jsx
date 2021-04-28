@@ -104,7 +104,7 @@ class Login extends Component {
       );
     } 
     else if(this.state.type === 'student'){
-      return (<CoursesPage {...this.state.user}/>)
+      return (<StudentPage {...this.state.user}/>)
     }
     else if(this.state.type === 'faculty'){
       return (<FacultyPage {...this.state.user}/>)
