@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+      integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles/login.css" />
+    <script src="validateLogin.js"></script>
+    <title>TimeLog</title>
+  </head>
+
+  <!--Main Section-->
+  <body>
+    <header id="main-section">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-1">TimeLog</h1>
+          <div class="row">
+            <div class="col-lg-8">
+              <!--Left-side Info and Icons-->
+              <div class="d-flex">
+                <div class="p-3 align-self-start">
+                  <i class="mt-2 fas fa-pencil-alt fa-3x"></i>
+                </div>
+                <div class="p-3 align-self-end">
+                  <h4>Submit Data</h4>
+                  <p class="lead">
+                    Log the time spent on individual course lessons
+                  </p>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="p-3 align-self-start">
+                  <i class="mt-2 fas fa-book fa-3x"></i>
+                </div>
+                <div class="p-3 align-self-end">
+                  <h4>View Data</h4>
+                  <p class="lead">
+                    View and export all time data to a spreadsheet for further
+                    use
+                  </p>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="p-3 align-self-start">
+                  <i class="mt-2 fas fa-lock fa-3x"></i>
+                </div>
+                <div class="p-3 align-self-end">
+                  <h4>Security</h4>
+                  <p class="lead">
+                    Submit data through user accounts anonymously
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!--Login Form-->
+            <div class="col-lg-4">
+              <div class="card bg-info text-center card-form">
+                <h3 class="card-header">Login</h3>
+                <div class="card-body">
+                  <form id="loginForm" action="" class="pb-3">
+                    <div class="form-group">
+                      <input
+                        type="email"
+                        id="emailInput"
+                        class="form-control form-control-lg"
+                        placeholder="Email"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="password"
+                        id="passwordInput"
+                        class="form-control form-control-lg"
+                        placeholder="Password"
+                      />
+                    </div>
+                    <input
+                      type="submit"
+                      value="Login"
+                      class="btn btn-secondary btn-block"
+                      onclick="return validateLogin()"
+                    />
+                  </form>
+                  <a href="createAccount.html" class="lead" id="create"
+                    >Create Account</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </body>
+</html>

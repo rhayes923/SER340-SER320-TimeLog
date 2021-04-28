@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+      integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+      crossorigin="anonymous"
+    />
+    <script
+      src="http://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+      integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="styles/login.css" />
+    <script src="validateCreateAccount.js"></script>
+    <title>TimeLog</title>
+  </head>
+
+  <!--Main Section-->
+  <body>
+    <header id="main-section">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-1">TimeLog</h1>
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="d-flex">
+                <!--Left-side Info and Icons-->
+                <div class="p-3 align-self-start">
+                  <i class="mt-2 fas fa-pencil-alt fa-3x"></i>
+                </div>
+                <div class="p-3 align-self-end">
+                  <h4>Submit Data</h4>
+                  <p class="lead">
+                    Log the time spent on individual course lessons
+                  </p>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="p-3 align-self-start">
+                  <i class="mt-2 fas fa-book fa-3x"></i>
+                </div>
+                <div class="p-3 align-self-end">
+                  <h4>View Data</h4>
+                  <p class="lead">
+                    View and export all time data to a spreadsheet for further
+                    use
+                  </p>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="p-3 align-self-start">
+                  <i class="mt-2 fas fa-lock fa-3x"></i>
+                </div>
+                <div class="p-3 align-self-end">
+                  <h4>Security</h4>
+                  <p class="lead">
+                    Submit data through user accounts anonymously
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!--Create Account Form-->
+            <div class="col-lg-4">
+              <div class="card bg-info text-center card-form">
+                <h3 class="card-header">Create Account</h3>
+                <div class="card-body">
+                  <form class="pb-3">
+                    <div class="form-group">
+                      <input
+                        type="email"
+                        id="emailInput"
+                        class="form-control form-control-lg"
+                        placeholder="Email"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="password"
+                        id="passwordInput"
+                        class="form-control form-control-lg"
+                        placeholder="Password"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <input
+                        type="password"
+                        id="confirmPasswordInput"
+                        class="form-control form-control-lg"
+                        placeholder="Confirm Password"
+                      />
+                    </div>
+                    <!--Select Courses Dropdown-->
+                    <div class="dropdown">
+                      <a
+                        class="dropdown-toggle btn btn-secondary btn-block"
+                        data-toggle="dropdown"
+                      >
+                        Select Courses
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                        <li>
+                          <label class="checkbox">
+                            <input type="checkbox" />
+                            Course 1
+                          </label>
+                        </li>
+                        <li>
+                          <label class="checkbox">
+                            <input type="checkbox" />
+                            Course 2
+                          </label>
+                        </li>
+                        <li>
+                          <label class="checkbox">
+                            <input type="checkbox" />
+                            Course 3
+                          </label>
+                        </li>
+                        <li>
+                          <label class="checkbox">
+                            <input type="checkbox" />
+                            Course 4
+                          </label>
+                        </li>
+                        <li>
+                          <label class="checkbox">
+                            <input type="checkbox" />
+                            Course 5
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
+                  </form>
+                  <a
+                    href="login.html"
+                    class="btn btn-secondary btn-block"
+                    role="button"
+                    onclick="return validateCreateAccount()"
+                    >Submit</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </body>
+</html>
