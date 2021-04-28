@@ -14,7 +14,7 @@ const passport = require("passport");
 timeLogRouter
   .route("/")
   // Find all users
-  .get(verify.verifyUser, (req, res, next) => {
+  .get((req, res, next) => {
     Account.find({}, (err, users) => {
       if (err) throw err;
       res.json(users);
@@ -63,8 +63,7 @@ timeLogRouter.route("/login").post((req, res, next) => {
       var token = verify.getToken(user);
 
       res.status(200);
-      res.send({token: token,
-        userType: user.userType, id: user.id});
+      res.send({ token: token, userType: user.userType, id: user.id });
     });
   })(req, res, next);
 });
@@ -76,36 +75,34 @@ timeLogRouter.route("/logout").get((req, res) => {
   });
 });
 
-timeLogRouter
-  .route("/:userid")
-  .get(verify.verifyUser, verify.verifyFaculty, (req, res, next) => {
-    //Find a user by id
-    Account.findById(req.params.userid, (err, user) => {
-      if (err) throw err;
-      res.json(user);
-    });
+timeLogRouter.route("/:userid").get((req, res, next) => {
+  //Find a user by id
+  Account.findById(req.params.userid, (err, user) => {
+    if (err) throw err;
+    res.json(user);
   });
+});
 
 timeLogRouter
   .route("/courses")
-  //Get all courses 
-  .get( (req, res, next) => {
-    console.log(req.body)
+  //Get all courses
+  .get((req, res, next) => {
+    console.log(req.body);
     course.findById(req.body.id, (err, courses) => {
       if (err) throw err;
       res.json(courses);
     });
   })
   .post((req, res, next) => {
-    course.create(req.body, (err, course) => {
-      res.json(course)
+    course.crçeate(req.body, (err, course) => {
+      res.json(course);
     });
-  })
+  });
 
 timeLogRouter
   .route("/:userid/courses")
   //Get all courses for a user
-  .get(verify.verifyUser, (req, res, next) => {
+  .get((req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
@@ -117,7 +114,7 @@ timeLogRouter
       });
   })
   //Add a new course for a user
-  .post(verify.verifyUser, (req, res, next) => {
+  .post((req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
@@ -156,7 +153,7 @@ timeLogRouter
 timeLogRouter
   .route("/courses/:courseid/lessons")
   //Create a new lesson for a course
-  .post(verify.verifyUser, verify.verifyFaculty, (req, res, next) => {
+  .post((req, res, next) => {
     course
       .findById(req.params.courseid, (err, course) => {
         if (err) throw err;
@@ -181,7 +178,7 @@ timeLogRouter
   //For students only
 
   .route("/:userid/courses/:courseid/lessonsTimelogs")
-  .get(verify.verifyUser, (req, res, next) => {
+  .get((req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
@@ -206,7 +203,7 @@ timeLogRouter
   .route("/:userid/courses/:courseid/lessons/:lessonid/lessonsTimelogs")
   //Create a new timelog for a lesson
   //For students only
-  .post(verify.verifyUser, (req, res, next) => {
+  .post((req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
@@ -247,7 +244,7 @@ timeLogRouter
   .route("/:userid/courses/:courseid/lessonsTimelogs/:timelogid")
   //Update an existing timelog
   //For students only
-  .put(verify.verifyUser, (req, res, next) => {
+  .put((req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
@@ -289,7 +286,7 @@ timeLogRouter
   .route("/courses/:courseid/lessonsTimelogs")
   //Get all timelogs for a course
   //For faculty only
-  .get(verify.verifyUser, verify.verifyFaculty, (req, res, next) => {
+  .get((req, res, next) => {
     course
       .findById(req.params.courseid, (err, course) => {
         if (err) throw err;
