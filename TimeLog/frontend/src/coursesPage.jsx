@@ -9,7 +9,13 @@ import StudentPage from "./studentPage";
 class CoursesPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { courses: [], type: null };
+    this.state = {
+      courses: [],
+      type: null,
+      name: "",
+      courseCode: "",
+      lessons: [],
+    };
   }
 
   async componentDidMount() {
@@ -17,7 +23,7 @@ class CoursesPage extends Component {
     // .get(`http://localhost:8080/users/${this.props.userID}/courses`)
     let id = auth.getUserID();
     let courses = await axios
-      .get(`http://localhost:8080/users/${id}/courses`)
+      .get(`http://localhost:8080/users/courses`)
       .catch((error) => {
         console.error(error);
       });
@@ -41,7 +47,11 @@ class CoursesPage extends Component {
                   console.log(course);
                   return (
                     <Card style={{ width: "18rem" }}>
-                      <Card.Body>
+                      <Card.Body
+                        onClick={() =>
+                          this.handleCardClick(course._id, course.courseCode)
+                        }
+                      >
                         <Card.Title variant="primary">
                           <Badge variant="primary">
                             Course Name: {course.name}
@@ -56,13 +66,21 @@ class CoursesPage extends Component {
                 })
               : null}
           </CardGroup>
-          <Link
-            to={{
-              pathname: `/coursesList/${auth.getUserID()}`,
-            }}
+          <p>
+            {this.state.courseName}-{this.state.courseCode2}
+          </p>
+
+          <Button
+            variant="primary"
+            onClick={() =>
+              this.handleCourseAdd(
+                this.state.courseName,
+                this.state.courseCode2
+              )
+            }
           >
-            <Button variant="primary">Add Course</Button>
-          </Link>
+            Add Course
+          </Button>
 
           <button
             id="back"
@@ -79,6 +97,39 @@ class CoursesPage extends Component {
     } else if (this.state.type === "back") {
       return <StudentPage {...this.state.user} />;
     }
+  }
+
+  handleCardClick(event, courseName) {
+    this.setState({ courseCode2: event });
+    this.setState({ courseName: courseName });
+  }
+
+  async handleCourseAdd() {
+    let courses3 = await axios
+      .get(`http://localhost:8080/users/courses/${this.state.courseCode2}`)
+      .catch((error) => {
+        console.error(error);
+      });
+    if (courses3 != null) {
+      this.setState({
+        courses3: courses3.data,
+      });
+      // alert(this.state.courses3.name);
+    }
+    this.setState({ type: "back" });
+
+    let courses2 = {
+      name: this.state.courses3.name,
+      courseCode: this.state.courses3.courseCode,
+      lessons: null,
+    };
+
+    let id = auth.getUserID();
+    let result2 = await axios
+      .post(`http://localhost:8080/users/${id}/courselist`, courses2)
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   handleBack = async (event) => {

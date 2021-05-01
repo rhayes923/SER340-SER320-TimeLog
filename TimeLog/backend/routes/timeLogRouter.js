@@ -14,7 +14,7 @@ const passport = require("passport");
 timeLogRouter
   .route("/")
   // Find all users
-  .get((req, res, next) => {
+  .get(verify.verifyUser, (req, res, next) => {
     Account.find({}, (err, users) => {
       if (err) throw err;
       res.json(users);
@@ -75,51 +75,156 @@ timeLogRouter.route("/logout").get((req, res) => {
   });
 });
 
-timeLogRouter.route("/:userid").get((req, res, next) => {
-  //Find a user by id
-  Account.findById(req.params.userid, (err, user) => {
-    if (err) throw err;
-    res.json(user);
-  });
-});
-
 timeLogRouter
   .route("/courses")
   //Get all courses
   .get((req, res, next) => {
     console.log(req.body);
-    course.findById(req.body.id, (err, courses) => {
+    course.find({}, (err, course) => {
+      // course.find(req.body, (err, course) => {
       if (err) throw err;
-      res.json(courses);
+      res.json(course);
     });
   })
   .post((req, res, next) => {
-    course.crçeate(req.body, (err, course) => {
+    course.create(req.body, (err, course) => {
       res.json(course);
     });
   });
 
 timeLogRouter
-  .route("/:userid/courses")
-  //Get all courses for a user
+  .route("/courses/:courseid/lessons")
+  //Get all courses
   .get((req, res, next) => {
+    course
+      .findById(req.params.courseid, (err, course) => {
+        if (err) throw err;
+        return course;
+      })
+      .populate("courses")
+      .exec((err, course) => {
+        if (err) throw err;
+        lesson.find({}, (err, lesson) => {
+          // course.find(req.body, (err, course) => {
+          if (err) throw err;
+          res.json(lesson);
+        });
+      });
+  })
+  .post((req, res, next) => {
+    lesson.create(req.body, (err, lesson) => {
+      res.json(lesson);
+    });
+  });
+
+timeLogRouter
+  .route("/courses/:courseid/lessons/:lessonid")
+  //Get all courses
+  .get((req, res, next) => {
+    course
+      .findById(req.params.courseid, (err, course) => {
+        if (err) throw err;
+        return course;
+      })
+      .populate("lessons")
+      .exec((err, course) => {
+        if (err) throw err;
+        lesson.findById(req.params.lessonid, (err, lesson) => {
+          if (err) throw err;
+          // return lesson;
+          res.json(lesson);
+        });
+      });
+  });
+
+timeLogRouter
+  .route("/:userid/courselist/:courseid")
+  .get(verify.verifyUser, (req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
     })
-      .populate("courses")
+      .populate("courselist")
       .exec((err, user) => {
         if (err) throw err;
-        res.send(user.courses);
+        course
+          .findById(req.params.courseid, (err, course) => {
+            if (err) throw err;
+            return course;
+          })
+          .populate({ path: "lessons", populate: { path: "timeLogs" } })
+          .exec((err, course) => {
+            if (err) throw err;
+            res.json(course);
+          });
+      });
+  });
+
+timeLogRouter.route("/courses/:courseid").get((req, res, next) => {
+  console.log(req.body);
+  course.findById(req.params.courseid, (err, course) => {
+    if (err) throw err;
+    res.json(course);
+  });
+});
+
+timeLogRouter
+  .route("/lessons")
+  //Get all lessons
+  .get((req, res, next) => {
+    console.log(req.body);
+    lesson.find({}, (err, lesson) => {
+      if (err) throw err;
+      res.json(lesson);
+    });
+  })
+  .post((req, res, next) => {
+    lesson.create(req.body, (err, lesson) => {
+      res.json(lesson);
+    });
+  });
+
+timeLogRouter
+  .route("/timelogs")
+  //Get all lessons
+  .get((req, res, next) => {
+    console.log(req.body);
+    timeLog.find({}, (err, timeLog) => {
+      if (err) throw err;
+      res.json(timeLog);
+    });
+  })
+  .post((req, res, next) => {
+    timeLog.create(req.body, (err, timeLog) => {
+      res.json(timeLog);
+    });
+  });
+
+timeLogRouter
+  .route("/:userid/courselist")
+  //Get all courses for a user
+  .get(verify.verifyUser, (req, res, next) => {
+    Account.findById(req.params.userid, (err, user) => {
+      if (err) throw err;
+      return user;
+    })
+      .populate("courselist")
+      .exec((err, user) => {
+        if (err) throw err;
+        course.find({}, (err, course) => {
+          // course.find(req.body, (err, course) => {
+          if (err) throw err;
+          res.json(course);
+        });
       });
   })
   //Add a new course for a user
-  .post((req, res, next) => {
+  .post(verify.verifyUser, (req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
     })
-      .populate("courses")
+      .populate("courselist")
       .exec((err, user) => {
         if (err) throw err;
         //Check if course already exists globally in the system
@@ -151,9 +256,9 @@ timeLogRouter
   });
 
 timeLogRouter
-  .route("/courses/:courseid/lessons")
+  .route("/courselist/:courseid/lessons")
   //Create a new lesson for a course
-  .post((req, res, next) => {
+  .post(verify.verifyUser, verify.verifyFaculty, (req, res, next) => {
     course
       .findById(req.params.courseid, (err, course) => {
         if (err) throw err;
@@ -177,13 +282,13 @@ timeLogRouter
   //Get all timelogs for a specific user in a specific course
   //For students only
 
-  .route("/:userid/courses/:courseid/lessonsTimelogs")
-  .get((req, res, next) => {
+  .route("/:userid/courselist/:courseid/lessonsTimelogs")
+  .get(verify.verifyUser, (req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
     })
-      .populate("courses")
+      .populate("courselist")
       .exec((err, user) => {
         if (err) throw err;
         course
@@ -200,15 +305,15 @@ timeLogRouter
   });
 
 timeLogRouter
-  .route("/:userid/courses/:courseid/lessons/:lessonid/lessonsTimelogs")
+  .route("/:userid/courselist/:courseid/lessons/:lessonid/lessonsTimelogs")
   //Create a new timelog for a lesson
   //For students only
-  .post((req, res, next) => {
+  .post(verify.verifyUser, (req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
     })
-      .populate("courses")
+      .populate("courselist")
       .exec((err, user) => {
         if (err) throw err;
         course
@@ -241,15 +346,15 @@ timeLogRouter
   });
 
 timeLogRouter
-  .route("/:userid/courses/:courseid/lessonsTimelogs/:timelogid")
+  .route("/:userid/courselist/:courseid/lessonsTimelogs/:timelogid")
   //Update an existing timelog
   //For students only
-  .put((req, res, next) => {
+  .put(verify.verifyUser, (req, res, next) => {
     Account.findById(req.params.userid, (err, user) => {
       if (err) throw err;
       return user;
     })
-      .populate("courses")
+      .populate("courselist")
       .exec((err, user) => {
         if (err) throw err;
         course
@@ -283,10 +388,10 @@ timeLogRouter
   });
 
 timeLogRouter
-  .route("/courses/:courseid/lessonsTimelogs")
+  .route("/courselist/:courseid/lessonsTimelogs")
   //Get all timelogs for a course
   //For faculty only
-  .get((req, res, next) => {
+  .get(verify.verifyUser, verify.verifyFaculty, (req, res, next) => {
     course
       .findById(req.params.courseid, (err, course) => {
         if (err) throw err;

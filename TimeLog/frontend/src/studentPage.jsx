@@ -11,14 +11,69 @@ import auth from "./service/authService";
 class StudentPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { courses: [], lessons: [], type: null };
+    this.state = {
+      courseid: "608c36a74e789e0722ca8f58",
+      courses: [],
+      lessons: [],
+      timeLog: null,
+      type: null,
+      lessonName: null,
+    };
   }
+
   async componentDidMount() {
     console.log(this.props);
     // .get(`http://localhost:8080/users/${this.props.userID}/courses`)
     let id = auth.getUserID();
     let courses = await axios
-      .get(`http://localhost:8080/users/${id}/courses`)
+      .get(`http://localhost:8080/users/${id}/courselist`)
+      .catch((error) => {
+        console.error(error);
+      });
+
+    if (courses != null) {
+      this.setState({
+        courses: courses.data,
+      });
+      console.log(courses);
+    }
+
+    let lessons = await axios
+      .get(`http://localhost:8080/users/lessons`)
+      .catch((error) => {
+        console.error(error);
+      });
+    if (lessons != null) {
+      this.setState({
+        lessons: lessons.data,
+      });
+      console.log(lessons);
+      this.render();
+    }
+  }
+
+  async handleGetCourse(courseid) {
+    let id = auth.getUserID();
+    let courseget = await axios
+      .get(`http://localhost:8080/users/${id}/courselist/${courseid}`)
+      .catch((error) => {
+        console.error(error);
+      });
+    // alert(courseget.name)
+    return courseget.name;
+    // if (courses != null) {
+    //   this.setState({
+    //     courses: courses.data,
+    //   });
+    //   console.log(courses);
+    // }
+  }
+
+  async getLessons(courseid) {
+    console.log(this.props);
+    let id = auth.getUserID();
+    let courses = await axios
+      .get(`http://localhost:8080/lessons`)
       .catch((error) => {
         console.error(error);
       });
@@ -30,24 +85,9 @@ class StudentPage extends Component {
     }
   }
 
-  handleGetLessons = async (event) => {
-    let id = auth.getUserID();
-    let courseId = this.state.courseId;
-    let lessons = await axios
-      .get(`http://localhost:8080/users/${id}/courses/${courseId}/lessons`)
-      .catch((error) => {
-        console.error(error);
-      });
-    if (lessons != null) {
-      this.setState({
-        lessons: lessons.data,
-      });
-      console.log(lessons);
-    }
-  };
-
   render() {
     let courses = [...this.state.courses];
+    let lessons = [...this.state.lessons];
     const { user } = this.props;
 
     if (this.state.type === null) {
@@ -122,19 +162,45 @@ class StudentPage extends Component {
               </CardGroup>
 
               <h3 style={{ color: "white" }}>
-                Lessons for {this.state.courseTitle}:
+                Lessons for {this.state.course}:
               </h3>
+              <CardGroup style={{ padding: "2rem", justifyContent: "center" }}>
+                {this.state.lessons != []
+                  ? lessons.map((lesson) => {
+                      console.log(lesson);
+                      return (
+                        <Card style={{ width: "13rem" }}>
+                          <Card.Body>
+                            <Card.Title variant="primary">
+                              <Badge variant="primary">Lesson</Badge>{" "}
+                            </Card.Title>
+                            <Card.Subtitle className="mb-2 text-muted">
+                              Code: {lesson.lessonNumber}
+                            </Card.Subtitle>
+                            <form onSubmit={this.handleTimeLog}>
+                              <label style={{ color: "black" }}>
+                                Lesson {this.state.courseCode}
+                              </label>
+                              <input
+                                style={{ color: "black" }}
+                                type="text"
+                                placeholder="Time taken (min)"
+                                value={this.state.timeLog}
+                                // onChange={this.handleCodeChange}
+                              />
+                              <input
+                                type="submit"
+                                style={{ color: "black" }}
+                                value="Submit"
+                              />
+                            </form>
+                          </Card.Body>
+                        </Card>
+                      );
+                    })
+                  : null}
+              </CardGroup>
 
-              <form onSubmit={this.handleTimeLog}>
-                <label style={{ color: "white" }}>Lesson Name</label>
-                <input
-                  type="text"
-                  placeholder="Time taken (min)"
-                  value={this.state.courseCode}
-                  onChange={this.handleCodeChange}
-                />
-                <input type="submit" value="Submit" />
-              </form>
               <hr></hr>
             </div>
           </header>
@@ -145,17 +211,34 @@ class StudentPage extends Component {
     }
   }
 
+  async handleTimeLog(event) {
+    event.preventDefault();
+
+    // event.preventDefault();
+    const timelog = {
+      minutes: "12",
+      // minutes: this.state.timeLog,
+      course: "1.2",
+      // course: this.state.courseName,
+    };
+
+    let result = await axios
+      .post(`http://localhost:8080/users/timelogs`, timelog)
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   handleCoursesPage = async (event) => {
     this.setState({ type: "coursespage" });
   };
 
-  handleCardClick(event, id) {
-    this.setState({ courseTitle: event });
-    this.setState({ courseId: id });
-  }
+  async handleCardClick(courseCode, courseid2) {
+    this.state.courseid = courseid2;
+    this.componentDidMount();
 
-  // // logic for uploading timelog data to database
-  // handleTimeLog() {}
+    //   }
+  }
 }
 
 export default StudentPage;

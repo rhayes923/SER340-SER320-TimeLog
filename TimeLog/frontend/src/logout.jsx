@@ -3,7 +3,7 @@ import { Component } from "react";
 class Logout extends Component {
   componentDidMount() {
     //auth.logout();
-    localStorage.clear();
+    // localStorage.clear();
     //window.location = "/";
     window.location.href = "/";
     console.log("Logging out!!")

@@ -15,6 +15,7 @@ class FacultyPage extends React.Component {
       courseCode: "",
       courses: [],
       lessons: [],
+      timelogs: [],
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleCodeChange = this.handleCodeChange.bind(this);
@@ -61,16 +62,22 @@ class FacultyPage extends React.Component {
       lessons: this.state.lessons,
     };
     let result = await axios
-      .post(
-        `http://localhost:8080/users/6088810f801973c2c30ddd87/courses`,
-        course
-      )
+      .post(`http://localhost:8080/users/courses`, course)
+      .catch((error) => {
+        console.error(error);
+      });
+
+    let id = auth.getUserID();
+    let result2 = await axios
+      .post(`http://localhost:8080/users/${id}/courselist`, course)
+
       .catch((error) => {
         console.error(error);
       });
   }
 
   async handleLessonSubmit(event) {
+    // localStorage.setItem(`TimeLogReq${this.state.courseCode2}`, `${this.state.lessonNumber}`)
     event.preventDefault();
     const lesson = {
       lessonNumber: this.state.lessonNumber,
@@ -80,8 +87,7 @@ class FacultyPage extends React.Component {
     let result = await axios
       .post(
         // the router contains this route with post funtion but is giving 404
-        `http://localhost:8080/courses/${this.state.courseCode2}/lessons`,
-        // `http://localhost:8080/users/6088810f801973c2c30ddd87/courses/${this.state.courseCode2}/lessons`,
+        `http://localhost:8080/users/lessons`,
         lesson
       )
       .catch((error) => {
@@ -94,7 +100,7 @@ class FacultyPage extends React.Component {
     // .get(`http://localhost:8080/users/${this.props.userID}/courses`)
     let id = auth.getUserID();
     let courses = await axios
-      .get(`http://localhost:8080/users/6088810f801973c2c30ddd87/courses`)
+      .get(`http://localhost:8080/users/courses`)
       .catch((error) => {
         console.error(error);
       });
@@ -104,9 +110,23 @@ class FacultyPage extends React.Component {
       });
       console.log(courses);
     }
+
+    let timelogs = await axios
+      .get(`http://localhost:8080/users/timelogs`)
+      .catch((error) => {
+        console.error(error);
+      });
+    if (timelogs != null) {
+      this.setState({
+        timelogs: timelogs.data,
+      });
+      console.log(timelogs);
+      this.render();
+    }
   }
 
   render() {
+    let timelogs = [...this.state.timelogs];
     let courses = [...this.state.courses];
     return (
       <div>
@@ -114,7 +134,7 @@ class FacultyPage extends React.Component {
         <header
           style={{
             backgroundImage: `url(${background})`,
-            height: "670px",
+            height: "2000px",
             alignitems: "center",
             justifycontent: "center",
           }}
@@ -141,16 +161,6 @@ class FacultyPage extends React.Component {
                         <Card.Subtitle className="mb-2 text-muted">
                           Code: {course.courseCode}
                         </Card.Subtitle>
-                        <button
-                          id="coursespage"
-                          type="submit"
-                          style={{ width: "80px" }}
-                          className="sm small btn-danger btn-block"
-                          role="button"
-                          onClick={this.handleExport}
-                        >
-                          Export Data
-                        </button>
                       </Card.Body>
                     </Card>
                   );
@@ -158,8 +168,29 @@ class FacultyPage extends React.Component {
               : null}
           </CardGroup>
           <label style={{ color: "white" }}>
-            TimeLogs for {this.state.courseName}:
+            TimeLogs{this.state.courseName}:
           </label>
+
+          <CardGroup style={{ padding: "2rem", justifyContent: "center" }}>
+            {this.state.timelogs != []
+              ? timelogs.map((timelog) => {
+                  console.log(timelog);
+                  return (
+                    <Card style={{ width: "13rem" }}>
+                      <Card.Body>
+                        <Card.Title variant="primary">
+                          <Badge variant="primary">
+                            Lesson: {timelog.course}
+                          </Badge>{" "}
+                        </Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
+                        <p style={{ color: "black" }}>{timelog.minutes}</p>
+                      </Card.Body>
+                    </Card>
+                  );
+                })
+              : null}
+          </CardGroup>
 
           <hr></hr>
 
